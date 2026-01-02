@@ -1943,3 +1943,15 @@ class SAVPE(nn.Module):
         aggregated = score.transpose(-2, -3) @ x.reshape(B, self.c, C // self.c, -1).transpose(-1, -2)
 
         return F.normalize(aggregated.transpose(-2, -3).reshape(B, Q, -1), dim=-1, p=2)
+
+class CBAM(nn.Module):
+    """Convolutional Block Attention Module (CBAM) for enhancing feature representations.
+
+    This module applies both channel and spatial attention mechanisms to the input feature maps, allowing the model
+    to focus on important features while suppressing less relevant ones.
+
+    Attributes:
+        conv (nn.Sequential): Sequential container for convolutional layers and batch normalization.
+        conv1 (nn.Sequential): Sequential container for 1x1 convolutional layers and batch normalization.
+        act (nn.Module): Activation function applied after convolution operations."""
+    
