@@ -38,6 +38,7 @@ from ultralytics.nn.modules import (
     C3x,
     CBFuse,
     CBLinear,
+    CBAM,
     Classify,
     Concat,
     Conv,
@@ -1571,6 +1572,7 @@ def parse_model(d, ch, verbose=True):
             C2fPSA,
             C2fCIB,
             C2PSA,
+            CBAM,
             A2C2f,
         }
     )

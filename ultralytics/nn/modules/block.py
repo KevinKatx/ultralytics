@@ -40,6 +40,7 @@ __all__ = (
     "C3x",
     "CBFuse",
     "CBLinear",
+    "CBAM", 
     "ContrastiveHead",
     "GhostBottleneck",
     "HGBlock",
