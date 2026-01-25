@@ -1,6 +1,3 @@
 from ultralytics import YOLO
-
-
-model = YOLO('yolov8n.yaml')  # build a new model from YAML
-
+model = YOLO(r'C:\Clone Repos\Modified-Ultralytics-for-CBAM-Implementation-of-YOLOv8\ultralytics\cfg\models\v8\yolov8-CBAM.yaml')  # build a new model from YAML
 results = model.train(data='coco128.yaml', epochs=3, imgsz=320)  # train the model

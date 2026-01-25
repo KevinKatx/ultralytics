@@ -1572,7 +1572,6 @@ def parse_model(d, ch, verbose=True):
             C2fPSA,
             C2fCIB,
             C2PSA,
-            CBAM,
             A2C2f,
         }
     )
@@ -1625,6 +1624,11 @@ def parse_model(d, ch, verbose=True):
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
+        elif m is CBAM:
+            c1, c2 = ch[f], args[0]
+            if c2 != nc:
+                c2 = make_divisible(min(c2, max_channels) * width, 8)
+            args = [c1, *args[1:]]
         elif m in frozenset(
             {Detect, WorldDetect, YOLOEDetect, Segment, YOLOESegment, Pose, OBB, ImagePoolingAttn, v10Detect}
         ):
