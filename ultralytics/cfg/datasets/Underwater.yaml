@@ -1,0 +1,13 @@
+train: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/train/images
+val: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/valid/images
+test: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/test/images
+
+nc: 6
+names: ['container', 'electronics', 'fishing_waste', 'metal_debris', 'plastic_debris', 'ppe']
+
+roboflow:
+  workspace: roboflowmodels-rpmxg
+  project: my-first-project-oww9e
+  version: 2
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/roboflowmodels-rpmxg/my-first-project-oww9e/dataset/2
