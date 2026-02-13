@@ -1,6 +1,6 @@
-train: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/train/images
-val: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/valid/images
-test: C:\Users\Test\OneDrive\Documents\Thesis\datasets\Underwater/test/images
+train: C:\Users\Test\Documents\Thesis Files\dataset
+val: C:\Users\Test\Documents\Thesis Files\dataset
+test: C:\Users\Test\Documents\Thesis Files\dataset
 
 nc: 6
 names: ['container', 'electronics', 'fishing_waste', 'metal_debris', 'plastic_debris', 'ppe']
