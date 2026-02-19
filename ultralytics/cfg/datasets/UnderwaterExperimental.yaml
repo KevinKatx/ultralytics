@@ -1,0 +1,13 @@
+train: C:\Users\Test\Documents\Thesis Files\dataset/train/images
+val: C:\Users\Test\Documents\Thesis Files\dataset/valid/images
+test: C:\Users\Test\Documents\Thesis Files\dataset/test/images
+
+nc: 4
+names: ['container', 'fishing_waste', 'plastic_debris', 'ppe']
+
+roboflow:
+  workspace: roboflowmodels-rpmxg
+  project: my-first-project-oww9e
+  version: 4
+  license: CC BY 4.0
+  url: https://universe.roboflow.com/roboflowmodels-rpmxg/my-first-project-oww9e/dataset/4

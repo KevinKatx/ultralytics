@@ -1,13 +1,13 @@
-train: C:\Users\Test\Documents\Thesis Files\dataset
-val: C:\Users\Test\Documents\Thesis Files\dataset
-test: C:\Users\Test\Documents\Thesis Files\dataset
+train: C:\Users\Test\Documents\Thesis Files\datasetv5Rebalanced/train/images
+val: C:\Users\Test\Documents\Thesis Files\datasetv5Rebalanced/valid/images
+test: C:\Users\Test\Documents\Thesis Files\datasetv5Rebalanced/test/images
 
-nc: 6
-names: ['container', 'electronics', 'fishing_waste', 'metal_debris', 'plastic_debris', 'ppe']
+nc: 5
+names: ['ManMade_objects', 'Submerged_metal', 'Submerged_natural_object', 'Submerged_wood', 'plastic_debris']
 
 roboflow:
   workspace: roboflowmodels-rpmxg
   project: my-first-project-oww9e
-  version: 2
+  version: 5
   license: CC BY 4.0
-  url: https://universe.roboflow.com/roboflowmodels-rpmxg/my-first-project-oww9e/dataset/2
+  url: https://universe.roboflow.com/roboflowmodels-rpmxg/my-first-project-oww9e/dataset/5
