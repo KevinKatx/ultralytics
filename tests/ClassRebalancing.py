@@ -92,14 +92,14 @@ def balance_roboflow_dataset(dataset_path, output_path):
     for class_id, files in files_by_class.items():
         if class_id == highest_class:
             # Reduce by 1000 (randomly select files to keep)
-            target_count = max(0, len(files) - 1000)
+            target_count = max(0, len(files) - 500)
             selected_files = random.sample(files, min(target_count, len(files)))
             files_to_copy.extend(selected_files)
             print(f"Class {class_id}: Keeping {len(selected_files)}/{len(files)} files")
             
         elif class_id == second_highest_class:
             # Reduce by 500
-            target_count = max(0, len(files) - 500)
+            target_count = max(0, len(files) - 250)
             selected_files = random.sample(files, min(target_count, len(files)))
             files_to_copy.extend(selected_files)
             print(f"Class {class_id}: Keeping {len(selected_files)}/{len(files)} files")
@@ -204,8 +204,8 @@ def balance_roboflow_dataset(dataset_path, output_path):
 # Usage example
 if __name__ == "__main__":
     # Set your paths
-    dataset_path = r"C:\Users\Test\Documents\Thesis Files\datasetv5"  # Replace with your dataset path
-    output_path = r"C:\Users\Test\Documents\Thesis Files\datasetv5Rebalanced"        # Replace with desired output path
+    dataset_path = r"C:\Users\Test\Documents\Thesis Files\datasetv11"  # Replace with your dataset path
+    output_path = r"C:\Users\Test\Documents\Thesis Files\datasetv11Rebalanced"        # Replace with desired output path
     
     # Run the balancing
     balance_roboflow_dataset(dataset_path, output_path)
