@@ -1,0 +1,13 @@
+train: C:\Users\Test\Documents\Thesis Files\New Datasets\Turbidity(Clear)(Balanced)/train/images
+val: C:\Users\Test\Documents\Thesis Files\New Datasets\Turbidity(Clear)(Balanced)/valid/images
+test: C:\Users\Test\Documents\Thesis Files\New Datasets\Turbidity(Clear)(Balanced)/test/images
+
+nc: 5
+names: ['ManMade_objects', 'Submerged_metal', 'Submerged_natural_object', 'Submerged_wood', 'plastic_debris']
+
+roboflow:
+  workspace: roboflowmodels-rpmxg
+  project: roboflowmodels-rpmxg
+  version: dataset
+  license: Private
+  url: https://app.roboflow.com/roboflowmodels-rpmxg/roboflowmodels-rpmxg/dataset

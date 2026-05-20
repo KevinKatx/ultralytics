@@ -1,6 +1,6 @@
-train: C:\Users\Test\Documents\Thesis Files\ThesisDatasetV12/train/images
-val: C:\Users\Test\Documents\Thesis Files\ThesisDatasetV12/valid/images
-test: C:\Users\Test\Documents\Thesis Files\ThesisDatasetV12/test/images
+train: C:\Users\Test\Documents\Thesis Files\TheseisDatasetV2(Balanced)/train/images
+val: C:\Users\Test\Documents\Thesis Files\TheseisDatasetV2(Balanced)/valid/images
+test: C:\Users\Test\Documents\Thesis Files\TheseisDatasetV2(Balanced)/test/images
 
 nc: 5
 names: ['ManMade_objects', 'Submerged_metal', 'Submerged_natural_object', 'Submerged_wood', 'plastic_debris']

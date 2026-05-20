@@ -2,14 +2,14 @@ import cv2
 from ultralytics import YOLO
 
 
-def run_comparison_demo(file_path):
+def run_comparison_demo(file_path, model1_path, model2_path, model3_path, model4_path):
 # Load 4 videos
     cap = cv2.VideoCapture(file_path)
 
-    model1 = YOLO(r"C:\Clone Repos\Modified-Ultralytics-for-CBAM-Implementation-of-YOLOv8\tests\runs\detect\Underwater Training Results\YOLOv8lateBBone\weights\best.pt")
-    model2 = YOLO(r"C:\Clone Repos\Modified-Ultralytics-for-CBAM-Implementation-of-YOLOv8\tests\runs\detect\Underwater Training Results\YOLOv8earlyBBone\weights\best.pt")
-    model3 = YOLO(r"C:\Clone Repos\Modified-Ultralytics-for-CBAM-Implementation-of-YOLOv8\tests\runs\detect\Underwater Training Results\YOLOv8\weights\best.pt")
-    model4 = YOLO(r"C:\Clone Repos\Modified-Ultralytics-for-CBAM-Implementation-of-YOLOv8\tests\runs\detect\Underwater Training Results\YOLOv11\weights\best.pt")
+    model1 = YOLO(model1_path)
+    model2 = YOLO(model2_path)
+    model3 = YOLO(model3_path)
+    model4 = YOLO(model4_path)
 
     # Define output resolution for each of the 4 videos
     width, height = 640, 360 
