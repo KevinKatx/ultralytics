@@ -18,7 +18,7 @@ def browse_video(*args):
     for i in range(len(model_paths)):
         model_paths[i] = browse_models()
     file_path = filedialog.askopenfilename(
-        title="Select Video",
+        title="Select 4 models and then a Video",
         filetypes=(("MP4 files", "*.mp4"), ("All files", "*.*"))
     )
     liveDetectionVideoStacking.run_comparison_demo(file_path,model_paths[0],model_paths[1],model_paths[2],model_paths[3])
