@@ -166,12 +166,23 @@ class DetectionApp(tk.Tk):
         self.cap = None
         self.playback_thread = None
         self.stop_flag = threading.Event()
+        self.pause_flag = threading.Event()   # set = paused
         self.loaded_models = {}  # path -> loaded YOLO model (cached)
         self._tk_img = None      # keep a reference so Tk doesn't GC it
+
+        # Frame history for prev/next navigation while paused
+        self._frame_cache = []        # list of BGR composites already rendered
+        self._frame_cache_max = 300   # keep at most N frames in memory
+        self._current_frame_idx = -1  # index into _frame_cache being displayed
 
         self.video_window = None  # popup window shown while running
         self.canvas = None
         self.canvas_image_id = None
+
+        # Playback-control buttons (created in _open_video_window)
+        self.pause_btn = None
+        self.prev_btn = None
+        self.next_btn = None
 
         self._build_ui()
 
@@ -273,7 +284,20 @@ class DetectionApp(tk.Tk):
 
         canvas = tk.Canvas(win, width=DISPLAY_W, height=DISPLAY_H, bg="black")
         canvas.pack()
-        ttk.Button(win, text="Stop", command=self._stop).pack(pady=6)
+
+        btn_frame = ttk.Frame(win)
+        btn_frame.pack(pady=6)
+
+        prev_btn = ttk.Button(btn_frame, text="⏮ Prev", command=self._prev_frame, state="disabled")
+        prev_btn.pack(side="left", padx=4)
+
+        pause_btn = ttk.Button(btn_frame, text="⏸ Pause", command=self._toggle_pause)
+        pause_btn.pack(side="left", padx=4)
+
+        next_btn = ttk.Button(btn_frame, text="Next ⏭", command=self._next_frame, state="disabled")
+        next_btn.pack(side="left", padx=4)
+
+        ttk.Button(btn_frame, text="⏹ Stop", command=self._stop).pack(side="left", padx=4)
 
         # Place the popup just to the right of the main window.
         self.update_idletasks()
@@ -284,6 +308,9 @@ class DetectionApp(tk.Tk):
         self.video_window = win
         self.canvas = canvas
         self.canvas_image_id = canvas.create_image(0, 0, anchor="nw")
+        self.pause_btn = pause_btn
+        self.prev_btn = prev_btn
+        self.next_btn = next_btn
 
     def _close_video_window(self):
         if self.video_window is not None:
@@ -343,6 +370,9 @@ class DetectionApp(tk.Tk):
         self.cap = cap
 
         self.stop_flag.clear()
+        self.pause_flag.clear()
+        self._frame_cache.clear()
+        self._current_frame_idx = -1
         self.start_btn.config(state="disabled")
         self.stop_btn.config(state="normal")
         self.status_var.set("Running...")
@@ -358,10 +388,51 @@ class DetectionApp(tk.Tk):
 
     def _stop(self):
         self.stop_flag.set()
+        self.pause_flag.clear()  # unblock spin-wait so thread can exit
         self.start_btn.config(state="normal")
         self.stop_btn.config(state="disabled")
         self.status_var.set("Stopped")
         self._close_video_window()
+
+    def _toggle_pause(self):
+        if self.pause_flag.is_set():
+            # Resume
+            self.pause_flag.clear()
+            if self.pause_btn:
+                self.pause_btn.config(text="⏸ Pause")
+            if self.next_btn:
+                self.next_btn.config(state="disabled")
+            self.status_var.set("Running...")
+        else:
+            # Pause
+            self.pause_flag.set()
+            if self.pause_btn:
+                self.pause_btn.config(text="▶ Resume")
+            self._update_nav_buttons()
+            self.status_var.set("Paused")
+
+    def _update_nav_buttons(self):
+        """Enable/disable Prev and Next based on current position in cache."""
+        if not self.pause_flag.is_set():
+            return
+        can_prev = self._current_frame_idx > 0
+        can_next = self._current_frame_idx < len(self._frame_cache) - 1
+        if self.prev_btn:
+            self.prev_btn.config(state="normal" if can_prev else "disabled")
+        if self.next_btn:
+            self.next_btn.config(state="normal" if can_next else "disabled")
+
+    def _prev_frame(self):
+        if self._current_frame_idx > 0:
+            self._current_frame_idx -= 1
+            self._show_frame(self._frame_cache[self._current_frame_idx])
+            self._update_nav_buttons()
+
+    def _next_frame(self):
+        if self._current_frame_idx < len(self._frame_cache) - 1:
+            self._current_frame_idx += 1
+            self._show_frame(self._frame_cache[self._current_frame_idx])
+            self._update_nav_buttons()
 
     def _playback_loop(self, models, labels):
         rows, cols = grid_dims_for_count(len(models))
@@ -370,6 +441,11 @@ class DetectionApp(tk.Tk):
         delay = 1.0 / fps
 
         while not self.stop_flag.is_set():
+            # Spin-wait while paused (sleep briefly to avoid burning CPU)
+            if self.pause_flag.is_set():
+                time.sleep(0.05)
+                continue
+
             t0 = time.time()
             ok, frame = self.cap.read()
             if not ok:
@@ -386,6 +462,13 @@ class DetectionApp(tk.Tk):
                 annotated_frames.append(label_frame(resized, label, scale=LABEL_SCALE))
 
             composite = make_composite(annotated_frames, rows, cols, cell_w, cell_h)
+
+            # Cache the composite for prev/next navigation
+            self._frame_cache.append(composite)
+            if len(self._frame_cache) > self._frame_cache_max:
+                self._frame_cache.pop(0)
+            self._current_frame_idx = len(self._frame_cache) - 1
+
             self._show_frame(composite)
 
             elapsed = time.time() - t0
@@ -417,6 +500,7 @@ class DetectionApp(tk.Tk):
 
     def on_close(self):
         self.stop_flag.set()
+        self.pause_flag.clear()
         if self.cap:
             self.cap.release()
         self._close_video_window()
